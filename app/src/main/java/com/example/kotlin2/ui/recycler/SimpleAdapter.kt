@@ -3,8 +3,10 @@ package com.example.kotlin2.ui.recycler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.kotlin2.R
 
 class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
@@ -15,8 +17,7 @@ class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
         return SimpleViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.item_main_viewholder, parent, false)
-        )
+                .inflate(R.layout.item_main_viewholder, parent, false))
     }
 
     override fun onBindViewHolder(holder: SimpleViewHolder, position: Int) {
@@ -27,7 +28,7 @@ class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
         return mList.size
     }
 
-    fun submitList(list: MutableList<String>) {
+    fun submitList(list: List<String>) {
         mList.clear()
         mList.addAll(list)
         notifyDataSetChanged()
@@ -37,9 +38,10 @@ class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
     constructor(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         private val textView: TextView = itemView.findViewById(R.id.textView)
+        private val imageView: ImageView = itemView.findViewById(R.id.image_view)
 
         fun onBind(text: String) {
-            textView.text = text
+            Glide.with(imageView.context).load(text).into(imageView)
         }
     }
 }
