@@ -12,7 +12,6 @@ import com.example.kotlin2.R
 class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
     private var mList: MutableList<String> = mutableListOf()
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
         return SimpleViewHolder(
             LayoutInflater
@@ -34,9 +33,7 @@ class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class SimpleViewHolder
-    constructor(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    class SimpleViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textView: TextView = itemView.findViewById(R.id.textView)
         private val imageView: ImageView = itemView.findViewById(R.id.image_view)
 

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 
 
 class MainViewModel : ViewModel() {
-
     private var mQuestions: MutableList<String> = mutableListOf()
     val mImages = MutableLiveData<List<String>>()
     var currentQuestionPosition = MutableLiveData<Int>()
@@ -13,7 +12,6 @@ class MainViewModel : ViewModel() {
     fun getImages() {
         mImages.value = mQuestions
         currentQuestionPosition.value = 0
-
         mQuestions.add("https://tinyjpg.com/images/social/website.jpg")
         mQuestions.add("https://tinyjpg.com/images/social/website.jpg")
         mQuestions.add("https://tinyjpg.com/images/social/website.jpg")
