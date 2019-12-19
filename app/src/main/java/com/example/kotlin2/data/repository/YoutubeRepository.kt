@@ -9,10 +9,14 @@ import com.example.kotlin2.model.PlaylistModel
 
 class YoutubeRepository : IYoutubeRepository {
 
+    private var youtubeClient: YoutubeClient? = null
 
+    init {
+        youtubeClient = YoutubeClient()
+    }
 
     override fun getYoutubeData(youtubeCallback: OnYoutubeCallback) {
-        val youtubeClient: YoutubeClient? = null
+
         youtubeClient?.getPlaylists(object : OnYoutubeCallback {
 
             override fun onSuccess(data: MutableLiveData<PlaylistModel>) {

@@ -70,10 +70,11 @@ class MainActivity : AppCompatActivity() {
             App.youtubeRepository.getYoutubeData(object : IYoutubeRepository.OnYoutubeCallback {
                 override fun onSuccess(data: MutableLiveData<PlaylistModel>) {
                     Log.e("ololo", "main activity: " + data.value)
+                    logs("asdsadasdsadsad")
                 }
 
                 override fun onFailure(error: String) {
-
+                    logs("asdsadasdsadsad")
                 }
             })
             mViewModel.forwardPressed()
@@ -86,5 +87,9 @@ class MainActivity : AppCompatActivity() {
         fab_back.setOnClickListener {
             mViewModel.backPressed()
         }
+    }
+
+    private fun logs(msg: String){
+        Log.d("_________________asasas", msg)
     }
 }
