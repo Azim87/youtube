@@ -1,14 +1,13 @@
 package com.example.kotlin2.data.repository
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.kotlin2.data.remote.IYoutubeClient
 import com.example.kotlin2.data.remote.YoutubeClient
 import com.example.kotlin2.data.repository.IYoutubeRepository.OnYoutubeCallback
 import com.example.kotlin2.model.PlaylistModel
 
 
 class YoutubeRepository : IYoutubeRepository {
-
     private var youtubeClient: YoutubeClient? = null
 
     init {
@@ -23,7 +22,7 @@ class YoutubeRepository : IYoutubeRepository {
                 youtubeCallback.onSuccess(data)
             }
 
-            override fun onFailure(error: String) {
+            override fun onFailure(error: Exception) {
                 youtubeCallback.onFailure(error)
             }
         })

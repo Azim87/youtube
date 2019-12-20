@@ -8,15 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.kotlin2.R
+import com.example.kotlin2.model.ItemsItem
 
-class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
-    private var mList: MutableList<String> = mutableListOf()
+class SimpleAdapter(val function: (ItemsItem) -> Unit) : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
+    private var mList = mutableListOf<ItemsItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
         return SimpleViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.item_main_viewholder, parent, false))
+                .inflate(R.layout.item_main_viewholder, parent, false), function)
     }
 
     override fun onBindViewHolder(holder: SimpleViewHolder, position: Int) {
@@ -27,18 +28,23 @@ class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
         return mList.size
     }
 
-    fun submitList(list: List<String>) {
-        mList.clear()
-        mList.addAll(list)
+    fun submitList(list: List<ItemsItem>?) {
+        mList = list as MutableList<ItemsItem>
         notifyDataSetChanged()
     }
 
-    class SimpleViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textView: TextView = itemView.findViewById(R.id.textView)
-        private val imageView: ImageView = itemView.findViewById(R.id.image_view)
+    class SimpleViewHolder constructor(itemView: View, val function: (ItemsItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.textView)
+        val imageView: ImageView = itemView.findViewById(R.id.image_view)
 
-        fun onBind(text: String) {
-            Glide.with(imageView.context).load(text).into(imageView)
+
+
+        public fun onBind(item: ItemsItem) {
+            textView.text = item.snippet.title
+            Glide.with(imageView.context).load(item.snippet.thumbnails.default.url).into(imageView)
+            itemView.setOnClickListener {
+                function(item)
+            }
         }
     }
 }

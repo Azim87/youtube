@@ -1,95 +1,80 @@
 package com.example.kotlin2.ui
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.kotlin2.App
 import com.example.kotlin2.R
-import com.example.kotlin2.data.repository.IYoutubeRepository
+import com.example.kotlin2.model.ItemsItem
 import com.example.kotlin2.model.PlaylistModel
 import com.example.kotlin2.ui.recycler.SimpleAdapter
+import com.example.kotlin2.util.NetworkUtil
+import com.example.kotlin2.util.UIHelper
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity() {
 
+    private val DATA_ID: String = "id"
+    private val DATA_TITLE: String = "title"
+    private val DATA_CHANNEL: String = "channelTitle"
+    private val DATA_ETAG: String = "etag"
     private lateinit var mViewModel: MainViewModel
     private lateinit var mAdapter: SimpleAdapter
+    private lateinit var layout: LinearLayout
 
-    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initViewModel()
         initRecyclerView()
-        onBackPress()
-        onForwardPressed()
-        Log.d("ololo", "main activity: ")
+        fetchData()
+        layout = findViewById(R.id.layout_connection)
     }
+
 
     private fun initRecyclerView() {
         main_recycler_view.apply {
-            mAdapter = SimpleAdapter()
-            layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
+            mAdapter = SimpleAdapter() { item: ItemsItem -> clickItem(item) }
+            layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = mAdapter
         }
-        main_recycler_view.setOnTouchListener { v, event -> v?.onTouchEvent(event) ?: true }
     }
 
-    @SuppressLint("RestrictedApi")
+    private fun clickItem(item: ItemsItem) {
+        val intent = Intent(this, DetailPlaylistActivity::class.java)
+        intent.putExtra(DATA_ID, item.id)
+        intent.putExtra(DATA_TITLE, item.snippet.title)
+        intent.putExtra(DATA_CHANNEL, item.snippet.channelId)
+        intent.putExtra(DATA_ETAG, item.etag)
+        startActivity(intent)
+    }
+
     private fun initViewModel() {
         mViewModel = ViewModelProviders.of(this@MainActivity).get(MainViewModel::class.java)
-        mViewModel.mImages.observe(
-            this,
-            Observer<List<String>> { images -> mAdapter.submitList(images) })
-        mViewModel.currentQuestionPosition.observe(this, Observer { pos ->
-            main_recycler_view.smoothScrollToPosition(pos)
+    }
 
-            if (pos == 0) {
-                fab_back.visibility = View.INVISIBLE
-            } else if (pos == mAdapter.itemCount) {
-                fab_forward.visibility = View.INVISIBLE
-            } else {
-                fab_back.visibility = View.VISIBLE
-                fab_forward.visibility = View.VISIBLE
-            }
-        })
+    private fun updateAdapterData(list: PlaylistModel?) {
+        val data = list?.items
+        mAdapter.submitList(data)
+    }
+
+    private fun fetchData() {
         mViewModel.getImages()
+        mViewModel.mImages.observe(this, Observer<PlaylistModel>(this::updateAdapterData))
     }
 
-    private fun onForwardPressed() {
-        fab_forward.setOnClickListener {
+    fun refresh(view: View) {
+        if (!NetworkUtil.networkIsOnline()) {
+            UIHelper().showToast("нет доспута в интернет")
+            layout.visibility = View.VISIBLE
 
-            App.youtubeRepository.getYoutubeData(object : IYoutubeRepository.OnYoutubeCallback {
-                override fun onSuccess(data: MutableLiveData<PlaylistModel>) {
-                    Log.e("ololo", "main activity: " + data.value)
-                    logs("asdsadasdsadsad")
-                }
-
-                override fun onFailure(error: String) {
-                    logs("asdsadasdsadsad")
-                }
-            })
-            mViewModel.forwardPressed()
-
-
+        } else if (NetworkUtil.networkIsOnline()) {
+            fetchData()
+            layout.visibility = View.INVISIBLE
         }
-    }
-
-    private fun onBackPress() {
-        fab_back.setOnClickListener {
-            mViewModel.backPressed()
-        }
-    }
-
-    private fun logs(msg: String){
-        Log.d("_________________asasas", msg)
     }
 }

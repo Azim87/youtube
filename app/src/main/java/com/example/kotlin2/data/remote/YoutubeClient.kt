@@ -9,9 +9,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class YoutubeClient() : IYoutubeClient {
-
-    private val BASE_URL = "https://www.googleapis.com"
-    val channel = "UC_IfiZu3VkesO3L58L9WPhA"
+    val channel = "UC-JQzTHQrVA8j-tamvy66fw"
     val apiKey = "AIzaSyCWK-EoCHecYMMFAvl-DI5iegR9s1WW20Y"
     val part = "snippet,contentDetails"
     val maxResult = "50"
@@ -24,24 +22,22 @@ class YoutubeClient() : IYoutubeClient {
             maxResult)
             .enqueue(object : Callback<PlaylistModel> {
                 val data = MutableLiveData<PlaylistModel>()
-                override fun onResponse(
-                    call: Call<PlaylistModel>,
-                    response: Response<PlaylistModel>
-                ) {
+                override fun onResponse(call: Call<PlaylistModel>, response: Response<PlaylistModel>) {
                     if (response.isSuccessful) {
                         if (response.body() != null) {
                             data.value = response.body()
                             youtubeCallback.onSuccess(data)
-                            Log.d("ololo", "ssssss " + data)
+                        }else {
+                            Log.d("ololo", "upss, no data")
                         }
+                    }else {
+                        Log.d("ololo", "bad request")
                     }
                 }
 
                 override fun onFailure(call: Call<PlaylistModel>, t: Throwable) {
-                    youtubeCallback.onFailure(t.localizedMessage)
-                    Log.d("___________Sdsdsd", "asdasdsadsad")
+                    youtubeCallback.onFailure(Exception(t))
                 }
             })
-
     }
 }
