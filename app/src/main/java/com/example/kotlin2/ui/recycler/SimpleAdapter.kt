@@ -10,7 +10,8 @@ import com.bumptech.glide.Glide
 import com.example.kotlin2.R
 import com.example.kotlin2.model.ItemsItem
 
-class SimpleAdapter(val function: (ItemsItem) -> Unit) : RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
+class SimpleAdapter(private val function: (ItemsItem) -> Unit) :
+    RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
     private var mList = mutableListOf<ItemsItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
@@ -34,14 +35,12 @@ class SimpleAdapter(val function: (ItemsItem) -> Unit) : RecyclerView.Adapter<Si
     }
 
     class SimpleViewHolder constructor(itemView: View, val function: (ItemsItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.textView)
-        val imageView: ImageView = itemView.findViewById(R.id.image_view)
+        private val textView: TextView = itemView.findViewById(R.id.textView)
+        private val imageView: ImageView = itemView.findViewById(R.id.image_view)
 
-
-
-        public fun onBind(item: ItemsItem) {
+        fun onBind(item: ItemsItem) {
             textView.text = item.snippet.title
-            Glide.with(imageView.context).load(item.snippet.thumbnails.default.url).into(imageView)
+            Glide.with(imageView.context).load(item.snippet.thumbnails.high.url).into(imageView)
             itemView.setOnClickListener {
                 function(item)
             }

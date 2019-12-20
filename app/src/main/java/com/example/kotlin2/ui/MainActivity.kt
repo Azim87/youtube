@@ -29,16 +29,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initViewModel()
         initRecyclerView()
+        initViewModel()
         fetchData()
-        layout = findViewById(R.id.layout_connection)
+        checkInternet()
     }
 
-
     private fun initRecyclerView() {
+        layout = findViewById(R.id.layout_connection)
         main_recycler_view.apply {
-            mAdapter = SimpleAdapter() { item: ItemsItem -> clickItem(item) }
+            mAdapter = SimpleAdapter { item: ItemsItem -> clickItem(item) }
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = mAdapter
         }
@@ -64,15 +64,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchData() {
         mViewModel.getImages()
-        mViewModel.mImages.observe(this, Observer<PlaylistModel>(this::updateAdapterData))
+        mViewModel.mImages.observe(this, Observer<PlaylistModel> {
+            this.updateAdapterData(it)
+        })
     }
 
     fun refresh(view: View) {
+        checkInternet()
+    }
+
+    fun checkInternet() {
         if (!NetworkUtil.networkIsOnline()) {
             UIHelper().showToast("нет доспута в интернет")
             layout.visibility = View.VISIBLE
 
-        } else if (NetworkUtil.networkIsOnline()) {
+        } else {
             fetchData()
             layout.visibility = View.INVISIBLE
         }
