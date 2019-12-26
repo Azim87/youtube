@@ -78,10 +78,6 @@ class MainActivity : AppCompatActivity() {
         checkInternet()
     }
 
-    override fun onBackPressed() {
-        startActivity(Intent(this, MainActivity::class.java))
-    }
-
     private fun checkInternet() {
         if (!NetworkUtil.networkIsOnline()) {
             UIHelper().showToast("нет доспута в интернет")
