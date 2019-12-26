@@ -26,10 +26,8 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="80dp"
                 android:layout_marginRight="16dp"
                 android:gravity="top"
                 android:text="title"
@@ -50,19 +48,20 @@
                 android:textColor="#1A1A1A"
                 android:textSize="15sp" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/play_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="300dp"
-                android:layout_marginTop="200dp"
-                android:backgroundTint="@color/ColorAppTextView"
-                android:src="@drawable/ic_play_arrow_black_24dp"
-                app:layout_anchor="@id/tv_description"
-                app:layout_anchorGravity="bottom|right|end" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/play_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="140dp"
+        android:backgroundTint="@color/ColorAppTextView"
+        android:src="@drawable/ic_play_arrow_black_24dp"
+        app:layout_anchor="@id/tv_description"
+        app:layout_anchorGravity="bottom|right|end" />
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/dt_toolbar"
         android:layout_width="match_parent"
@@ -80,7 +79,7 @@
                 android:id="@+id/imgBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_chevron_left_black_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -91,7 +90,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:text="Back"
                 android:textColor="@color/ColorAppTextView"
                 android:textSize="17sp"

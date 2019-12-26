@@ -17,6 +17,7 @@ import com.example.kotlin2.util.NetworkUtil
 import com.example.kotlin2.util.UIHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
 
     private val DATA_ID: String = "id"
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(DATA_CHANNEL, item.snippet.channelId)
         intent.putExtra(DATA_ETAG, item.etag)
         startActivity(intent)
+        finish()
     }
 
     private fun initViewModel() {
@@ -76,7 +78,11 @@ class MainActivity : AppCompatActivity() {
         checkInternet()
     }
 
-    fun checkInternet() {
+    override fun onBackPressed() {
+        startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    private fun checkInternet() {
         if (!NetworkUtil.networkIsOnline()) {
             UIHelper().showToast("нет доспута в интернет")
             layout.visibility = View.VISIBLE

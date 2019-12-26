@@ -7,8 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.kotlin2.R
 import com.example.kotlin2.model.ItemsItem
+
 
 class SimpleAdapter(private val function: (ItemsItem) -> Unit) :
     RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
@@ -41,7 +45,15 @@ class SimpleAdapter(private val function: (ItemsItem) -> Unit) :
 
         fun onBind(item: ItemsItem) {
             textView.text = item.snippet.title
-            Glide.with(imageView.context).load(item.snippet.thumbnails.high.url).into(imageView)
+            Glide
+                .with(imageView.context)
+                .load(item.snippet.thumbnails.high.url)
+                .apply(RequestOptions()
+                        .transform(RoundedCorners(20))
+                        .error(R.drawable.ic_arrow_back).skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE))
+                .into(imageView)
+
             itemView.setOnClickListener {
                 function(item)
             }
