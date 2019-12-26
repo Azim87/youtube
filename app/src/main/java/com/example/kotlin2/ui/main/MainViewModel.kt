@@ -1,4 +1,4 @@
-package com.example.kotlin2.ui
+package com.example.kotlin2.ui.main
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

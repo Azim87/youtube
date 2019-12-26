@@ -16,8 +16,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".ui.DetailPlaylistActivity"/>
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.detail.DetailPlaylistActivity"/>
+        <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

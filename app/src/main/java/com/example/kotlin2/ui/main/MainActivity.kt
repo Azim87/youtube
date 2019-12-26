@@ -1,4 +1,4 @@
-package com.example.kotlin2.ui
+package com.example.kotlin2.ui.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
 import com.example.kotlin2.model.ItemsItem
 import com.example.kotlin2.model.PlaylistModel
-import com.example.kotlin2.ui.recycler.SimpleAdapter
+import com.example.kotlin2.ui.detail.DetailPlaylistActivity
+import com.example.kotlin2.ui.main.recycler.SimpleAdapter
 import com.example.kotlin2.util.NetworkUtil
 import com.example.kotlin2.util.UIHelper
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,7 +39,9 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         layout = findViewById(R.id.layout_connection)
         main_recycler_view.apply {
-            mAdapter = SimpleAdapter { item: ItemsItem -> clickItem(item) }
+            mAdapter = SimpleAdapter { item: ItemsItem ->
+                clickItem(item)
+            }
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = mAdapter
         }

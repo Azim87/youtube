@@ -1,4 +1,4 @@
-package com.example.kotlin2.ui
+package com.example.kotlin2.ui.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

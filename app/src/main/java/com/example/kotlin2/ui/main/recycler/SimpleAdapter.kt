@@ -1,4 +1,4 @@
-package com.example.kotlin2.ui.recycler
+package com.example.kotlin2.ui.main.recycler
 
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +18,8 @@ class SimpleAdapter(private val function: (ItemsItem) -> Unit) :
         return SimpleViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.item_main_viewholder, parent, false), function)
+                .inflate(R.layout.item_main_viewholder, parent, false), function
+        )
     }
 
     override fun onBindViewHolder(holder: SimpleViewHolder, position: Int) {
