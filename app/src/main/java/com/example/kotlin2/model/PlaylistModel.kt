@@ -1,5 +1,3 @@
-package com.example.kotlin2.model
-
 import com.google.gson.annotations.SerializedName
 
 data class PlaylistModel(

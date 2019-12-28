@@ -1,7 +1,10 @@
 package com.example.kotlin2.ui.main
 
+import ItemsItem
+import PlaylistModel
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
-import com.example.kotlin2.model.ItemsItem
-import com.example.kotlin2.model.PlaylistModel
+import com.example.kotlin2.model.DetailModel
 import com.example.kotlin2.ui.detail.DetailPlaylistActivity
 import com.example.kotlin2.ui.main.recycler.SimpleAdapter
+import com.example.kotlin2.util.Constants
 import com.example.kotlin2.util.NetworkUtil
 import com.example.kotlin2.util.UIHelper
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,10 +23,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val DATA_ID: String = "id"
-    private val DATA_TITLE: String = "title"
-    private val DATA_CHANNEL: String = "channelTitle"
-    private val DATA_ETAG: String = "etag"
     private lateinit var mViewModel: MainViewModel
     private lateinit var mAdapter: SimpleAdapter
     private lateinit var layout: LinearLayout
@@ -40,9 +39,7 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         layout = findViewById(R.id.layout_connection)
         main_recycler_view.apply {
-            mAdapter = SimpleAdapter { item: ItemsItem ->
-                clickItem(item)
-            }
+            mAdapter = SimpleAdapter(this@MainActivity::clickItem)
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = mAdapter
         }
@@ -50,10 +47,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun clickItem(item: ItemsItem) {
         val intent = Intent(this, DetailPlaylistActivity::class.java)
-        intent.putExtra(DATA_ID, item.id)
-        intent.putExtra(DATA_TITLE, item.snippet.title)
-        intent.putExtra(DATA_CHANNEL, item.snippet.channelId)
-        intent.putExtra(DATA_ETAG, item.etag)
+        intent.putExtra(Constants().DATA_ID, item.id)
+        intent.putExtra(Constants().DATA_TITLE, item.snippet.title)
+        intent.putExtra(Constants().DATA_CHANNEL, item.snippet.channelId)
+        intent.putExtra(Constants().DATA_ETAG, item.etag)
         startActivity(intent)
         finish()
     }
@@ -89,3 +86,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+

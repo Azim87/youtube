@@ -1,4 +1,4 @@
-package com.example.kotlin2.ui.main.recycler
+package com.example.kotlin2.ui.detail.recycler
 
 import ItemsItem
 import android.view.LayoutInflater
@@ -12,22 +12,21 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.kotlin2.R
-import com.example.kotlin2.model.DetailModel
 
 
-class SimpleAdapter(private val function: (ItemsItem) -> Unit) :
-    RecyclerView.Adapter<SimpleAdapter.SimpleViewHolder>() {
+class PlaylistAdapter(private val function: (ItemsItem) -> Unit) :
+    RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
     private var mList = mutableListOf<ItemsItem>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleViewHolder {
-        return SimpleViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
+        return PlaylistViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.item_main_viewholder, parent, false), function
+                .inflate(R.layout.item_youtube_playlist, parent, false), function
         )
     }
 
-    override fun onBindViewHolder(holder: SimpleViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         holder.onBind(mList[position])
     }
 
@@ -35,20 +34,17 @@ class SimpleAdapter(private val function: (ItemsItem) -> Unit) :
         return mList.size
     }
 
-    fun submitList(list: List<ItemsItem>?) {
+    fun submitList(list: List<ItemsItem>) {
         mList = list as MutableList<ItemsItem>
         notifyDataSetChanged()
     }
 
-    class SimpleViewHolder constructor(itemView: View, val function: (ItemsItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
-        private val textView: TextView = itemView.findViewById(R.id.textView)
-        private val textView2: TextView = itemView.findViewById(R.id.sub_title)
-        private val imageView: ImageView = itemView.findViewById(R.id.image_view)
+    class PlaylistViewHolder constructor(itemView: View, val function: (ItemsItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
+        private val textView: TextView = itemView.findViewById(R.id.detail_textView)
+        private val imageView: ImageView = itemView.findViewById(R.id.detail_image_view)
 
         fun onBind(item: ItemsItem) {
             textView.text = item.snippet.title
-            textView2.text = item.contentDetails.itemCount + " video series"
-
             Glide.with(imageView.context)
                 .load(item.snippet.thumbnails.high.url)
                 .apply(RequestOptions()

@@ -1,29 +1,92 @@
 package com.example.kotlin2.ui.detail
 
+import ItemsItem
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
+import com.example.kotlin2.model.DetailModel
+import com.example.kotlin2.ui.detail.recycler.PlaylistAdapter
+import com.example.kotlin2.ui.detailVideo.DetailVideoActivity
 import com.example.kotlin2.ui.main.MainActivity
+import com.example.kotlin2.util.Constants
 import kotlinx.android.synthetic.main.activity_detail_playlist.*
 
 class DetailPlaylistActivity : AppCompatActivity() {
+    private lateinit var mPlaylistAdapter: PlaylistAdapter
+    private lateinit var mViewModel: DetailPlaylistViewModel
+    private var id: String? = null
+    private var titlee: String? = null
+    private var description: String? = null
+    private var channelId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_playlist)
-        title = "Detail"
+        title = "detailPlaylist"
         getIntentData()
+        initRecycler()
+        subscribeToViewModel()
+        onBackClick()
     }
 
     private fun getIntentData(){
-        val title : String = intent.getStringExtra("title")
-        tv_title.text = title
+        id = intent.getStringExtra(Constants().DATA_ID)
+        titlee = intent?.getStringExtra(Constants().DATA_TITLE)
+        channelId = intent?.getStringExtra(Constants().DATA_CHANNEL)
+        description = intent?.getStringExtra(Constants().DATA_ETAG)
+
+    }
+
+    private fun initRecycler() {
+        recycler_view.apply {
+            mPlaylistAdapter =
+                PlaylistAdapter { item: ItemsItem ->
+                    (click(item))
+                }
+            adapter = mPlaylistAdapter
+            layoutManager = LinearLayoutManager(this@DetailPlaylistActivity)
+        }
+    }
+
+    private fun click(item: ItemsItem) {
+        val intent = Intent(this, DetailVideoActivity::class.java)
+        intent.putExtra("playlistId", id)
+        intent.putExtra("videoId", item.snippet.resourceId.videoId)
+        startActivity(intent)
+    }
+
+    private fun subscribeToViewModel() {
+        mViewModel = ViewModelProviders.of(this).get(DetailPlaylistViewModel::class.java)
+        id?.let { mViewModel.getParsedData(it) }
+        mViewModel.mDetailPlaylist.observe(this, Observer<DetailModel> {
+            this.updateAdapterData(it)
+        })
+    }
+
+    private fun updateAdapterData(list: DetailModel?) {
+        val data = list!!.items
+
+        tv_description.text = description
+        tv_title.text = titlee
+        mPlaylistAdapter.submitList(data)
+    }
+
+    private fun backToMain() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     override fun onBackPressed() {
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+        backToMain()
+    }
+
+    private fun onBackClick() {
+        detail_back_btn.setOnClickListener {
+            backToMain()
+        }
     }
 }
