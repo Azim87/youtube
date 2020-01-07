@@ -22,8 +22,7 @@ class PlaylistAdapter(private val function: (ItemsItem) -> Unit) :
         return PlaylistViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.item_youtube_playlist, parent, false), function
-        )
+                .inflate(R.layout.item_youtube_playlist, parent, false), function)
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
@@ -45,7 +44,8 @@ class PlaylistAdapter(private val function: (ItemsItem) -> Unit) :
 
         fun onBind(item: ItemsItem) {
             textView.text = item.snippet.title
-            Glide.with(imageView.context)
+            Glide
+                .with(imageView.context)
                 .load(item.snippet.thumbnails.high.url)
                 .apply(RequestOptions()
                         .transform(RoundedCorners(20))

@@ -6,6 +6,5 @@ import com.example.kotlin2.App
 class UIHelper {
     fun showToast(message: String) {
         Toast.makeText(App.instance, message, Toast.LENGTH_LONG).show()
-
     }
 }

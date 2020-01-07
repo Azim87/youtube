@@ -5,6 +5,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -16,7 +18,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
-        <activity android:name=".ui.detailVideo.DetailVideoActivity"></activity>
+        <activity
+            android:name=".ui.detailVideo.DetailVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".ui.detail.DetailPlaylistActivity" />
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>

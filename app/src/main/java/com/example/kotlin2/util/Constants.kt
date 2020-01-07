@@ -5,5 +5,7 @@ class Constants {
     public val DATA_TITLE: String = "title"
     public val DATA_CHANNEL: String = "channelTitle"
     public val DATA_ETAG: String = "etag"
-    public val DATA_DESC: String = "desc"
+    public val PLAYLIST_ID: String = "playlistId"
+    public val VIDEOS_ID: String = "videoId"
+
 }

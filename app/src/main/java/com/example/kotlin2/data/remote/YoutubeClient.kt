@@ -4,6 +4,7 @@ import PlaylistModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlin2.data.repository.IYoutubeRepository
+import com.example.kotlin2.model.DetaiVideolModel
 import com.example.kotlin2.model.DetailModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,7 +45,6 @@ class YoutubeClient() : IYoutubeClient {
     }
 
     override fun getDetailedPlaylistData(playlistId: String, detailYoutubeCallback: IYoutubeRepository.OnDetailYoutubeCallback) {
-        Log.d("ololo", "dfadf  " + playlistId)
         youtubeBuilder.getDetailYouTubePlaylist(
             part,
             apiKey,
@@ -55,7 +55,6 @@ class YoutubeClient() : IYoutubeClient {
             override fun onResponse(call: Call<DetailModel>, response: Response<DetailModel>) {
                 if (response.isSuccessful){
                     if (response.body() != null){
-                        Log.d("ololo" ," df" + response)
                         data.value = response.body()
                         detailYoutubeCallback.onSuccess(data)
                     }
@@ -70,5 +69,29 @@ class YoutubeClient() : IYoutubeClient {
             }
 
         })
+    }
+
+    override fun getVideo(videoId: String, videoDetailYoutubeCallback: IYoutubeRepository.OnVideoDetail) {
+        youtubeBuilder.getVideoDetail(
+            apiKey,
+            part,
+            videoId
+        ).enqueue(object : Callback<DetaiVideolModel> {
+            val data = MutableLiveData<DetaiVideolModel>()
+            override fun onResponse(
+                call: Call<DetaiVideolModel>,
+                response: Response<DetaiVideolModel> ) {
+                if (response.isSuccessful){
+                    data.value = response.body()
+                    videoDetailYoutubeCallback.onSuccess(data)
+                }
+            }
+
+            override fun onFailure(call: Call<DetaiVideolModel>, t: Throwable) {
+                videoDetailYoutubeCallback.onFailure(java.lang.Exception(t))
+            }
+
+        })
+
     }
 }

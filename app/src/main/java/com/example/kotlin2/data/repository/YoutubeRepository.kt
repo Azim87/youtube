@@ -4,6 +4,7 @@ import PlaylistModel
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlin2.data.remote.YoutubeClient
 import com.example.kotlin2.data.repository.IYoutubeRepository.OnYoutubeCallback
+import com.example.kotlin2.model.DetaiVideolModel
 import com.example.kotlin2.model.DetailModel
 
 class YoutubeRepository : IYoutubeRepository {
@@ -32,9 +33,21 @@ class YoutubeRepository : IYoutubeRepository {
             }
 
             override fun onFailure(error: Exception) {
-                detailYoutubeCallback.onFailure(java.lang.Exception(error))
+                detailYoutubeCallback.onFailure(error)
             }
         })
 
+    }
+
+    override fun getVideoDetail(videoId: String, videoDetail: IYoutubeRepository.OnVideoDetail) {
+        youtubeClient?.getVideo(videoId, object : IYoutubeRepository.OnVideoDetail {
+            override fun onSuccess(data: MutableLiveData<DetaiVideolModel>) {
+                videoDetail.onSuccess(data)
+            }
+
+            override fun onFailure(error: Exception) {
+                videoDetail.onFailure(error)
+            }
+        })
     }
 }

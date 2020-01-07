@@ -4,7 +4,6 @@ import ItemsItem
 import PlaylistModel
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -12,14 +11,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
-import com.example.kotlin2.model.DetailModel
 import com.example.kotlin2.ui.detail.DetailPlaylistActivity
 import com.example.kotlin2.ui.main.recycler.SimpleAdapter
 import com.example.kotlin2.util.Constants
 import com.example.kotlin2.util.NetworkUtil
 import com.example.kotlin2.util.UIHelper
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity() {
 

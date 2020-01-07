@@ -1,8 +1,10 @@
 package com.example.kotlin2.ui.detail
 
 import ItemsItem
+import android.content.ContentProvider
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore.Audio.Playlists.Members.PLAYLIST_ID
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -43,10 +45,7 @@ class DetailPlaylistActivity : AppCompatActivity() {
 
     private fun initRecycler() {
         recycler_view.apply {
-            mPlaylistAdapter =
-                PlaylistAdapter { item: ItemsItem ->
-                    (click(item))
-                }
+            mPlaylistAdapter = PlaylistAdapter { item: ItemsItem -> (click(item)) }
             adapter = mPlaylistAdapter
             layoutManager = LinearLayoutManager(this@DetailPlaylistActivity)
         }
@@ -54,8 +53,8 @@ class DetailPlaylistActivity : AppCompatActivity() {
 
     private fun click(item: ItemsItem) {
         val intent = Intent(this, DetailVideoActivity::class.java)
-        intent.putExtra("playlistId", id)
-        intent.putExtra("videoId", item.snippet.resourceId.videoId)
+        intent.putExtra(Constants().PLAYLIST_ID, id)
+        intent.putExtra(Constants().VIDEOS_ID, item.snippet.resourceId.videoId)
         startActivity(intent)
     }
 
@@ -69,7 +68,6 @@ class DetailPlaylistActivity : AppCompatActivity() {
 
     private fun updateAdapterData(list: DetailModel?) {
         val data = list!!.items
-
         tv_description.text = description
         tv_title.text = titlee
         mPlaylistAdapter.submitList(data)

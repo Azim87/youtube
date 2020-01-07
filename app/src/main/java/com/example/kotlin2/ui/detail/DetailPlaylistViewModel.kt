@@ -15,7 +15,6 @@ class DetailPlaylistViewModel : ViewModel() {
         youtubeRepository.getDetailYoutube(id, object : IYoutubeRepository.OnDetailYoutubeCallback {
             override fun onSuccess(data: MutableLiveData<DetailModel>) {
                 mDetailPlaylist.value = data.value
-                Log.d("ololo", "detail vm" + id)
             }
 
             override fun onFailure(error: Exception) {
