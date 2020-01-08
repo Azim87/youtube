@@ -10,11 +10,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class YoutubeClient() : IYoutubeClient {
+class YoutubeClient : IYoutubeClient {
     private var youtubeBuilder = RetrofitBuilder.getService()
 
     //region playlist
-    val channel = "UC_IfiZu3VkesO3L58L9WPhA"
+    val channel = "UC_Fh8kvtkVPkeihBs42jGcA"
     val apiKey = "AIzaSyCWK-EoCHecYMMFAvl-DI5iegR9s1WW20Y"
     val part = "snippet,contentDetails"
     val maxResult = "50"

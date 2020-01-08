@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(Constants().DATA_ID, item.id)
         intent.putExtra(Constants().DATA_TITLE, item.snippet.title)
         intent.putExtra(Constants().DATA_CHANNEL, item.snippet.channelId)
-        intent.putExtra(Constants().DATA_ETAG, item.etag)
+        intent.putExtra(Constants().DATA_ETAG, item.snippet.description)
         startActivity(intent)
         finish()
     }

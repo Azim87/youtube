@@ -83,12 +83,12 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         selectedVideoQuality = item.videoFile?.url
         selectedVideoExt = item.videoFile?.format!!.ext
         fileVideo = item
-
     }
 
     private fun updateAdapterData(list: DetaiVideolModel?) {
         video_title.text = list?.items?.get(0)?.snippet?.title
         video_description.text = list?.items?.get(0)?.snippet?.description
+        fileName = list?.items?.get(0)?.snippet?.title
         val link = list?.items?.get(0)?.id.toString()
         actualLink(link)
     }
@@ -141,7 +141,6 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                     downloadIds += DownloadMaster().downloadFile(
                         this,
                         fileVideo?.videoFile!!.url,
-                        downloadName + "." + fileVideo?.videoFile!!.format.ext,
                         downloadName + "." + fileVideo?.videoFile!!.format.ext)
                     downloadIds += "-"
                 }
@@ -149,7 +148,6 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                     downloadIds += DownloadMaster().downloadFile(
                         this,
                         fileVideo?.videoFile!!.url,
-                        downloadName + "." + fileVideo?.videoFile!!.format.ext,
                         downloadName + "." + fileVideo?.videoFile!!.format.ext
                     )
                 }
@@ -195,7 +193,7 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         val height = ytFile.format.height
         if (height != -1) {
             for (frVideo in this.formatsToShowList!!) {
-                if (frVideo?.height == height && (frVideo?.videoFile == null || frVideo.videoFile!!.format.fps == ytFile.format.fps)) {
+                if (frVideo.height == height && (frVideo.videoFile == null || frVideo.videoFile!!.format.fps == ytFile.format.fps)) {
                     return
                 }
             }
