@@ -1,5 +1,6 @@
 package com.example.kotlin2.ui.detailVideo.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlin2.R
 import com.example.kotlin2.model.YtVideo
 
-class DownloadDialogAdapter(val function: (YtVideo) -> Unit) :
-    RecyclerView.Adapter<DownloadDialogAdapter.YouTubeViewHolder>() {
+class DownloadDialogAdapter(val function: (YtVideo) -> Unit) : RecyclerView.Adapter<DownloadDialogAdapter.YouTubeViewHolder>() {
 
     private var list = mutableListOf<YtVideo>()
 
@@ -23,6 +23,7 @@ class DownloadDialogAdapter(val function: (YtVideo) -> Unit) :
         return list.size
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: YouTubeViewHolder, position: Int) {
         val model = list[position]
         holder.radioButton?.isChecked = model.isSelected
@@ -48,7 +49,6 @@ class DownloadDialogAdapter(val function: (YtVideo) -> Unit) :
         list = newList as MutableList<YtVideo>
         notifyDataSetChanged()
     }
-
 
     class YouTubeViewHolder(itemView: View, val function: (YtVideo) -> Unit) :
         RecyclerView.ViewHolder(itemView) {

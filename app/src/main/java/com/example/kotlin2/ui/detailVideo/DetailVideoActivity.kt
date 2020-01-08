@@ -1,6 +1,7 @@
 package com.example.kotlin2.ui.detailVideo
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
@@ -20,6 +21,7 @@ import at.huber.youtubeExtractor.YtFile
 import com.example.kotlin2.R
 import com.example.kotlin2.model.DetaiVideolModel
 import com.example.kotlin2.model.YtVideo
+import com.example.kotlin2.ui.detail.DetailPlaylistActivity
 import com.example.kotlin2.ui.detailVideo.adapter.DownloadDialogAdapter
 import com.example.kotlin2.util.CallBacks
 import com.example.kotlin2.util.Constants
@@ -27,7 +29,6 @@ import com.example.kotlin2.util.DownloadMaster
 import com.example.kotlin2.util.PlayerManager
 import com.google.android.exoplayer2.Player
 import kotlinx.android.synthetic.main.activity_detail_video.*
-import kotlinx.android.synthetic.main.alert_download_dialog.*
 
 class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
 
@@ -57,6 +58,7 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         setupViews()
         getIntentData()
         subscribeToViewModel()
+        onBackClick()
     }
 
     private fun getIntentData() {
@@ -236,6 +238,21 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             player_view.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
             player_view.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+    }
+
+    override fun onBackPressed() {
+        onBackPress()
+    }
+
+    private fun onBackPress() {
+        val intent = Intent(this, DetailPlaylistActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun onBackClick() {
+        video_back_btn.setOnClickListener {
+            onBackPress()
         }
     }
 }

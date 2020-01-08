@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:background="@color/cardview_light_background"
+        android:background="@color/colorPlaylistBackground"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -18,29 +18,51 @@
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="80dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="14dp"
-                android:text="title"
-                android:textColor="#1A1A1A"
-                android:textSize="24sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tv_description"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="120dp"
-                android:text="description"
-                android:textColor="#1A1A1A"
-                android:layout_marginBottom="30dp"
-                android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="14dp"
+                    android:fontFamily="@font/fjallaone_regular"
+                    android:text="title"
+                    android:textColor="@color/colorTitle"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_title"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="30dp"
+                    android:fontFamily="@font/notosans_regular"
+                    android:lineHeight="20dp"
+                    android:maxLines="4"
+                    android:text="description"
+                    android:textColor="@color/colorTitle"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/playlist_total_video"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:fontFamily="@font/notosans_regular"
+                    android:text="32 video series"
+                    android:textColor="@color/colorTotalVideo"
+                    android:textSize="12dp"
+                    android:layout_below="@id/tv_description"
+                    />
+
+            </RelativeLayout>
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/dt_toolbar"
@@ -70,7 +92,7 @@
                         android:id="@+id/detail_back_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Back"
+                        android:text="@string/back"
                         android:textColor="@color/ColorAppTextView"
                         android:textSize="17sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Playlist"
+                        android:text="@string/playlist"
                         android:textColor="@color/ColorAppTextView"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -107,6 +129,7 @@
         app:layout_anchorGravity="bottom|right|end" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="15dp"
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

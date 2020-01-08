@@ -1,6 +1,7 @@
 package com.example.kotlin2.ui.detail
 
 import ItemsItem
+import android.annotation.SuppressLint
 import android.content.ContentProvider
 import android.content.Intent
 import android.os.Bundle
@@ -66,10 +67,12 @@ class DetailPlaylistActivity : AppCompatActivity() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateAdapterData(list: DetailModel?) {
         val data = list!!.items
-        tv_description.text = description
+        tv_description.text = list.items[0].snippet.description
         tv_title.text = titlee
+        playlist_total_video.text = list.pageInfo.totalResults.toString() + " video series"
         mPlaylistAdapter.submitList(data)
     }
 

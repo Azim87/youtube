@@ -40,10 +40,13 @@ class PlaylistAdapter(private val function: (ItemsItem) -> Unit) :
 
     class PlaylistViewHolder constructor(itemView: View, val function: (ItemsItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
         private val textView: TextView = itemView.findViewById(R.id.detail_textView)
+        private val textViewTime: TextView = itemView.findViewById(R.id.detail_time)
         private val imageView: ImageView = itemView.findViewById(R.id.detail_image_view)
 
         fun onBind(item: ItemsItem) {
             textView.text = item.snippet.title
+            textViewTime.text = item.snippet.publishedAt
+
             Glide
                 .with(imageView.context)
                 .load(item.snippet.thumbnails.high.url)

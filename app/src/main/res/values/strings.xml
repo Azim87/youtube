@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Kotlin2</string>
     <string name="image_title">Image title</string>
+    <string name="playlist">Playlist</string>
+    <string name="back">Back</string>
+    <string name="download">Download</string>
 </resources>

@@ -5,5 +5,9 @@
     <color name="colorAccent">#D81B60</color>
     <color name="ColorAppTextView">#FF0000</color>
     <color name="ColorAppLight">#FFFFFF</color>
+    <color name="colorTitle">#1A1A1A</color>
+    <color name="colorTime">#616161</color>
+    <color name="colorPlaylistBackground">#F7F7F7</color>
+    <color name="colorTotalVideo">#151515</color>
 
 </resources>
