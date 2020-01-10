@@ -13,6 +13,7 @@ import com.example.kotlin2.model.ItemsItem
 import com.example.kotlin2.ui.detail.recycler.PlaylistAdapter
 import com.example.kotlin2.ui.detailVideo.DetailVideoActivity
 import com.example.kotlin2.util.Constants
+import com.example.kotlin2.util.visible
 import kotlinx.android.synthetic.main.activity_detail_playlist.*
 
 class DetailPlaylistActivity : AppCompatActivity() {
