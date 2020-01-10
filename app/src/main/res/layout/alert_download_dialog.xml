@@ -6,12 +6,10 @@
     android:minWidth="300dp"
     android:padding="8dp">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select video quality"/>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alert_recycler_view"
@@ -23,8 +21,9 @@
     <Button
         android:id="@+id/btn_alert_download"
         android:layout_width="match_parent"
+        android:background="@drawable/download_btn_style"
+        android:textColor="@color/ColorAppLight"
         android:layout_height="wrap_content"
         android:text="DOWNLOAD"/>
-
 
 </LinearLayout>

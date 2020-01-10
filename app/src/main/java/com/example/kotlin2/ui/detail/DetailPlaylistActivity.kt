@@ -1,20 +1,17 @@
 package com.example.kotlin2.ui.detail
 
-import ItemsItem
 import android.annotation.SuppressLint
-import android.content.ContentProvider
 import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore.Audio.Playlists.Members.PLAYLIST_ID
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
 import com.example.kotlin2.model.DetailModel
+import com.example.kotlin2.model.ItemsItem
 import com.example.kotlin2.ui.detail.recycler.PlaylistAdapter
 import com.example.kotlin2.ui.detailVideo.DetailVideoActivity
-import com.example.kotlin2.ui.main.MainActivity
 import com.example.kotlin2.util.Constants
 import kotlinx.android.synthetic.main.activity_detail_playlist.*
 
@@ -77,7 +74,6 @@ class DetailPlaylistActivity : AppCompatActivity() {
     }
 
     private fun backToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 

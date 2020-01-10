@@ -1,6 +1,6 @@
 package com.example.kotlin2.ui.main
 
-import PlaylistModel
+import com.example.kotlin2.model.PlaylistModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

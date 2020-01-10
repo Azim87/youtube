@@ -1,6 +1,6 @@
 package com.example.kotlin2.ui.detail.recycler
 
-import ItemsItem
+import com.example.kotlin2.model.ItemsItem
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -42,7 +42,6 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
     private var selectedVideoExt: String? = null
     private var fileVideo: YtVideo? = null
     private var fileName: String? = null
-
     private lateinit var player: Player
     private lateinit var playerManager: PlayerManager
     private lateinit var dialogDownloadButton: Button
@@ -246,8 +245,7 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
     }
 
     private fun onBackPress() {
-        val intent = Intent(this, DetailPlaylistActivity::class.java)
-        startActivity(intent)
+        finish()
     }
 
     private fun onBackClick() {

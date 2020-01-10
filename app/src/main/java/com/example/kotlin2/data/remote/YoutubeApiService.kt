@@ -1,6 +1,6 @@
 package com.example.kotlin2.data.remote
 
-import PlaylistModel
+import com.example.kotlin2.model.PlaylistModel
 import com.example.kotlin2.model.DetaiVideolModel
 import com.example.kotlin2.model.DetailModel
 import retrofit2.Call

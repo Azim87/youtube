@@ -1,7 +1,7 @@
 package com.example.kotlin2.ui.main
 
-import ItemsItem
-import PlaylistModel
+import com.example.kotlin2.model.ItemsItem
+import com.example.kotlin2.model.PlaylistModel
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(Constants().DATA_CHANNEL, item.snippet.channelId)
         intent.putExtra(Constants().DATA_ETAG, item.snippet.description)
         startActivity(intent)
-        finish()
     }
 
     private fun initViewModel() {

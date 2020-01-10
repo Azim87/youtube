@@ -1,6 +1,6 @@
 package com.example.kotlin2.data.remote
 
-import PlaylistModel
+import com.example.kotlin2.model.PlaylistModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlin2.data.repository.IYoutubeRepository

@@ -1,7 +1,17 @@
+package com.example.kotlin2.model
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.kotlin2.converter.PlaylistModelTypeConverter
 import com.google.gson.annotations.SerializedName
 
+
+@Entity(tableName = "play_list")
+@TypeConverters(PlaylistModelTypeConverter::class )
 data class PlaylistModel(
     @SerializedName("kind")
+    @PrimaryKey
     var kind: String,
     @SerializedName("pageInfo")
     var pageInfo: PageInfo,

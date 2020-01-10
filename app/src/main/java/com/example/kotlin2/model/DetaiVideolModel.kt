@@ -1,7 +1,5 @@
 package com.example.kotlin2.model
 
-import ItemsItem
-import PageInfo
 import com.google.gson.annotations.SerializedName
 
 data class DetaiVideolModel (
