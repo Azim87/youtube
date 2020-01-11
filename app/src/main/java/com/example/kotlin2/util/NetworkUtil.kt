@@ -4,7 +4,7 @@ package com.example.kotlin2.util
 
 import android.content.Context
 import android.net.ConnectivityManager
-import com.example.kotlin2.App
+import com.example.kotlin2.application.App
 
 object NetworkUtil {
     fun networkIsOnline(): Boolean {

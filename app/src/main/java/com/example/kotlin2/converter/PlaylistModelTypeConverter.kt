@@ -7,28 +7,27 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
 
-class PlaylistModelTypeConverter
+class PlaylistModelTypeConverter {
 
-val gson = Gson()
+    val gson = Gson()
 
-
-@TypeConverter
-fun toItemsItem(objects: List<ItemsItem>): String {
-    return gson.toJson(objects)
-}
-
-
-@TypeConverter
-fun fromItemsItem(data: String?): List<ItemsItem> {
-    if (data == null) {
-        return Collections.emptyList()
+    @TypeConverter
+    public fun toItemsItem(objects: List<ItemsItem>): String {
+        return gson.toJson(objects)
     }
-    val listType = object : TypeToken<List<ItemsItem>>() {}.type
-    return gson.fromJson(data, listType)
+
+    @TypeConverter
+    public fun fromItemsItem(data: String?): List<ItemsItem> {
+        if (data == null) {
+            return Collections.emptyList()
+        }
+        val listType = object : TypeToken<List<ItemsItem>>() {}.type
+        return gson.fromJson(data, listType)
+    }
+
+    @TypeConverter
+    fun toPageInfo(objects: PageInfo): String = gson.toJson(objects)
+
+    @TypeConverter
+    fun fromPageInfo(value: String?): PageInfo = gson.fromJson(value, PageInfo::class.java)
 }
-
-@TypeConverter
-fun toPageInfo(objects: PageInfo): String = gson.toJson(objects)
-
-@TypeConverter
-fun fromPageInfo(value: String?): PageInfo = gson.fromJson(value, PageInfo::class.java)

@@ -1,7 +1,7 @@
 package com.example.kotlin2.util
 
 import android.widget.Toast
-import com.example.kotlin2.App
+import com.example.kotlin2.application.App
 
 class UIHelper {
     fun showToast(message: String) {

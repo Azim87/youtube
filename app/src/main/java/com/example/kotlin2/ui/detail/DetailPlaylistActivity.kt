@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
 import com.example.kotlin2.model.DetailModel
 import com.example.kotlin2.model.ItemsItem
-import com.example.kotlin2.ui.detail.recycler.PlaylistAdapter
+import com.example.kotlin2.ui.detail.adapter.PlaylistAdapter
 import com.example.kotlin2.ui.detailVideo.DetailVideoActivity
 import com.example.kotlin2.util.Constants
-import com.example.kotlin2.util.visible
 import kotlinx.android.synthetic.main.activity_detail_playlist.*
 
 class DetailPlaylistActivity : AppCompatActivity() {

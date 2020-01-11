@@ -1,4 +1,4 @@
-package com.example.kotlin2.ui.detail.recycler
+package com.example.kotlin2.ui.detail.adapter
 
 import com.example.kotlin2.model.ItemsItem
 import android.view.LayoutInflater

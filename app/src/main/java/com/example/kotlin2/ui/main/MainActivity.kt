@@ -1,7 +1,5 @@
 package com.example.kotlin2.ui.main
 
-import com.example.kotlin2.model.ItemsItem
-import com.example.kotlin2.model.PlaylistModel
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -11,30 +9,34 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
+import com.example.kotlin2.model.ItemsItem
+import com.example.kotlin2.model.PlaylistModel
 import com.example.kotlin2.ui.detail.DetailPlaylistActivity
-import com.example.kotlin2.ui.main.recycler.SimpleAdapter
-import com.example.kotlin2.util.Constants
-import com.example.kotlin2.util.NetworkUtil
-import com.example.kotlin2.util.UIHelper
+import com.example.kotlin2.ui.main.adapter.SimpleAdapter
+import com.example.kotlin2.util.*
+import kotlinx.android.synthetic.main.activity_detail_playlist.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mViewModel: MainViewModel
     private lateinit var mAdapter: SimpleAdapter
-    private lateinit var layout: LinearLayout
+    private lateinit var network_container: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initRecyclerView()
         initViewModel()
-        fetchData()
-        checkInternet()
+//        fetchData()
+        getDataFromDatabase()
     }
 
     private fun initRecyclerView() {
-        layout = findViewById(R.id.layout_connection)
+        network_container = findViewById(R.id.layout_connection)
         main_recycler_view.apply {
             mAdapter = SimpleAdapter(this@MainActivity::clickItem)
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -61,25 +63,53 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchData() {
+        if (NetworkUtil.networkIsOnline()) {
+            network_container.gone()
+            recycler_view.visible()
+            mViewModel.getImages()
+            mViewModel.mImages.observe(this, Observer<PlaylistModel> {
+                val model: PlaylistModel? = it
+                this.updateAdapterData(model)
+                if (model != null) {
+                    updateDatabasePlaylist(model)
+                    getDataFromDatabase()
+                }
+            })
+
+        } else {
+            network_container.visible()
+            recycler_view.gone()
+            UIHelper().showToast(getString(R.string.internet_connection))
+        }
+    }
+
+    private fun updateDatabasePlaylist(model: PlaylistModel) {
+        mViewModel.insertPlaylistData(model)
+    }
+
+    private fun getDataFromDatabase() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val model = mViewModel.getDataFromDb()
+            if (!(model == null || model.items.isNullOrEmpty())) {
+                updateAdapterData(model)
+                fetchNewPlaylistData()
+
+            } else {
+                fetchData()
+            }
+        }
+    }
+
+    private fun fetchNewPlaylistData() {
         mViewModel.getImages()
-        mViewModel.mImages.observe(this, Observer<PlaylistModel> {
-            this.updateAdapterData(it)
+        mViewModel.mImages.observe(this, Observer<PlaylistModel> { data: PlaylistModel ->
+            updateDatabasePlaylist(data)
+            updateAdapterData(data)
         })
     }
 
     fun refresh(view: View) {
-        checkInternet()
-    }
-
-    private fun checkInternet() {
-        if (!NetworkUtil.networkIsOnline()) {
-            UIHelper().showToast("нет доспута в интернет")
-            layout.visibility = View.VISIBLE
-
-        } else {
-            fetchData()
-            layout.visibility = View.INVISIBLE
-        }
+        fetchData()
     }
 }
 

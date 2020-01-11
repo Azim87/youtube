@@ -1,4 +1,4 @@
-package com.example.kotlin2.ui.main.recycler
+package com.example.kotlin2.ui.main.adapter
 
 import com.example.kotlin2.model.ItemsItem
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.kotlin2.R
+import com.example.kotlin2.util.load
 
 
 class SimpleAdapter(private val function: (ItemsItem) -> Unit) :

@@ -2,7 +2,7 @@ package com.example.kotlin2.ui.detailVideo
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin2.App
+import com.example.kotlin2.application.App
 import com.example.kotlin2.data.repository.IYoutubeRepository
 import com.example.kotlin2.model.DetaiVideolModel
 import com.example.kotlin2.util.UIHelper

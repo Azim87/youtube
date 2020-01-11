@@ -3,6 +3,7 @@ package com.example.kotlin2.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.example.kotlin2.converter.ItemsItemTypeConverter
 import com.example.kotlin2.converter.PlaylistModelTypeConverter
 import com.google.gson.annotations.SerializedName
 
@@ -11,11 +12,11 @@ import com.google.gson.annotations.SerializedName
 @TypeConverters(PlaylistModelTypeConverter::class )
 data class PlaylistModel(
     @SerializedName("kind")
-    @PrimaryKey
     var kind: String,
     @SerializedName("pageInfo")
     var pageInfo: PageInfo,
     @SerializedName("etag")
+    @PrimaryKey
     var etag: String,
     @SerializedName("items")
     var items: List<ItemsItem>
@@ -83,6 +84,8 @@ data class Thumbnails(
     val medium: Medium
 )
 
+@Entity(tableName = "items_item")
+@TypeConverters(ItemsItemTypeConverter::class)
 data class ItemsItem(
     @SerializedName("snippet")
     val snippet: Snippet,
@@ -91,6 +94,7 @@ data class ItemsItem(
     @SerializedName("etag")
     val etag: String,
     @SerializedName("id")
+    @PrimaryKey
     val id: String,
     @SerializedName("contentDetails")
     val contentDetails: ContentDetails

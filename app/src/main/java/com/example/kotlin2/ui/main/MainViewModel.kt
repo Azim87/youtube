@@ -1,15 +1,20 @@
 package com.example.kotlin2.ui.main
 
-import com.example.kotlin2.model.PlaylistModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin2.App
+import androidx.lifecycle.viewModelScope
+import com.example.kotlin2.application.App
+import com.example.kotlin2.application.App.Companion.database
 import com.example.kotlin2.data.repository.IYoutubeRepository
+import com.example.kotlin2.model.PlaylistModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 class MainViewModel : ViewModel() {
     val mImages = MutableLiveData<PlaylistModel>()
+    private val db = App().getInstance().getDataBase()
     private var youtubeRepository = App.youtubeRepository
 
     fun getImages() {
@@ -22,5 +27,15 @@ class MainViewModel : ViewModel() {
                 Log.d("ololo", "EROOR $error" )
             }
         })
+    }
+
+    fun insertPlaylistData(model: PlaylistModel) {
+       viewModelScope.launch {
+         db.ytVideoDao().insertAllPlaylist(model)
+       }
+    }
+
+    suspend fun getDataFromDb(): PlaylistModel{
+        return db.ytVideoDao().getAllPlaylist()
     }
 }
