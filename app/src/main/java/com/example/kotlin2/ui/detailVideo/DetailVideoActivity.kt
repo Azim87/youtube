@@ -1,7 +1,6 @@
 package com.example.kotlin2.ui.detailVideo
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
@@ -21,7 +20,6 @@ import at.huber.youtubeExtractor.YtFile
 import com.example.kotlin2.R
 import com.example.kotlin2.model.DetaiVideolModel
 import com.example.kotlin2.model.YtVideo
-import com.example.kotlin2.ui.detail.DetailPlaylistActivity
 import com.example.kotlin2.ui.detailVideo.adapter.DownloadDialogAdapter
 import com.example.kotlin2.util.CallBacks
 import com.example.kotlin2.util.Constants

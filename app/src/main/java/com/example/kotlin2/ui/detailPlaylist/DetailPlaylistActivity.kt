@@ -1,4 +1,4 @@
-package com.example.kotlin2.ui.detail
+package com.example.kotlin2.ui.detailPlaylist
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,10 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
 import com.example.kotlin2.model.DetailModel
 import com.example.kotlin2.model.ItemsItem
-import com.example.kotlin2.ui.detail.adapter.PlaylistAdapter
+import com.example.kotlin2.ui.detailPlaylist.adapter.PlaylistAdapter
 import com.example.kotlin2.ui.detailVideo.DetailVideoActivity
 import com.example.kotlin2.util.Constants
 import kotlinx.android.synthetic.main.activity_detail_playlist.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DetailPlaylistActivity : AppCompatActivity() {
     private lateinit var mPlaylistAdapter: PlaylistAdapter
@@ -27,9 +30,10 @@ class DetailPlaylistActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_playlist)
         title = "detailPlaylist"
-        getIntentData()
+        mViewModel = ViewModelProviders.of(this).get(DetailPlaylistViewModel::class.java)
         initRecycler()
-        subscribeToViewModel()
+        getIntentData()
+        getDetailPlaylistData()
         onBackClick()
     }
 
@@ -38,7 +42,6 @@ class DetailPlaylistActivity : AppCompatActivity() {
         titlee = intent?.getStringExtra(Constants().DATA_TITLE)
         channelId = intent?.getStringExtra(Constants().DATA_CHANNEL)
         description = intent?.getStringExtra(Constants().DATA_ETAG)
-
     }
 
     private fun initRecycler() {
@@ -56,21 +59,50 @@ class DetailPlaylistActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun getDetailPlaylistData() {
+        CoroutineScope(Dispatchers.Main).launch {
+            var model = mViewModel.getDetailedPlaylistData()
+            if (model != null && model.isNullOrEmpty()) {
+                getExtraDetailedPlaylistData(model)
+            } else {
+                subscribeToViewModel()
+            }
+        }
+    }
+
+    fun getExtraDetailedPlaylistData(model: List<DetailModel>) {
+        var detailPlaylist: DetailModel? = null
+        for (i in 0 until model.size) {
+            for (z in 0 until model[i].items!!.size) {
+                if (model[i].items!![z].snippet.playlistId == id) {
+                    detailPlaylist == model[i]
+                }
+            }
+        }
+
+        if (detailPlaylist != null) updateAdapterData(detailPlaylist)
+        else subscribeToViewModel()
+    }
+
     private fun subscribeToViewModel() {
-        mViewModel = ViewModelProviders.of(this).get(DetailPlaylistViewModel::class.java)
-        id?.let { mViewModel.getParsedData(it) }
-        mViewModel.mDetailPlaylist.observe(this, Observer<DetailModel> {
-            this.updateAdapterData(it)
+        val datata = id?.let { mViewModel.getParsedData(it) }
+        mViewModel.mDetailPlaylist.observe(this, Observer<DetailModel> {data: DetailModel ->
+            if (datata != null){
+                updateAdapterData(data)
+                updateDatabaseDetailedPlaylistData(data)
+            }
         })
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateAdapterData(list: DetailModel?) {
-        val data = list!!.items
-        tv_description.text = list.items[0].snippet.description
+        tv_description.text = list!!.items[0].snippet.description
         tv_title.text = titlee
         playlist_total_video.text = list.pageInfo.totalResults.toString() + " video series"
-        mPlaylistAdapter.submitList(data)
+        mPlaylistAdapter.submitList(list.items)
+    }
+
+    private fun updateDatabaseDetailedPlaylistData(value: DetailModel){
+        mViewModel.insertAllDetailPlaylistData(value)
     }
 
     private fun backToMain() {

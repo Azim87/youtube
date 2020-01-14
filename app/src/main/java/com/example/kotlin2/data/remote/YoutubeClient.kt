@@ -61,7 +61,6 @@ class YoutubeClient : IYoutubeClient {
                 } else {
                     Log.d("ololo", "not successful " + response.code())
                 }
-
             }
 
             override fun onFailure(call: Call<DetailModel>, t: Throwable) {

@@ -5,10 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kotlin2.application.App
-import com.example.kotlin2.application.App.Companion.database
 import com.example.kotlin2.data.repository.IYoutubeRepository
 import com.example.kotlin2.model.PlaylistModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 

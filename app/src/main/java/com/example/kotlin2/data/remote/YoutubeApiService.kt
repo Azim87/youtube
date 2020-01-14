@@ -1,8 +1,8 @@
 package com.example.kotlin2.data.remote
 
-import com.example.kotlin2.model.PlaylistModel
 import com.example.kotlin2.model.DetaiVideolModel
 import com.example.kotlin2.model.DetailModel
+import com.example.kotlin2.model.PlaylistModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

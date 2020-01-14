@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin2.R
 import com.example.kotlin2.model.ItemsItem
 import com.example.kotlin2.model.PlaylistModel
-import com.example.kotlin2.ui.detail.DetailPlaylistActivity
+import com.example.kotlin2.ui.detailPlaylist.DetailPlaylistActivity
 import com.example.kotlin2.ui.main.adapter.SimpleAdapter
 import com.example.kotlin2.util.*
-import kotlinx.android.synthetic.main.activity_detail_playlist.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,10 +28,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mViewModel = ViewModelProviders.of(this@MainActivity).get(MainViewModel::class.java)
         initRecyclerView()
-        initViewModel()
-//        fetchData()
         getDataFromDatabase()
+    }
+
+    fun refresh(view: View) {
+        fetchData()
     }
 
     private fun initRecyclerView() {
@@ -53,19 +55,9 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun initViewModel() {
-        mViewModel = ViewModelProviders.of(this@MainActivity).get(MainViewModel::class.java)
-    }
-
-    private fun updateAdapterData(list: PlaylistModel?) {
-        val data = list?.items
-        mAdapter.submitList(data)
-    }
-
     private fun fetchData() {
         if (NetworkUtil.networkIsOnline()) {
             network_container.gone()
-            recycler_view.visible()
             mViewModel.getImages()
             mViewModel.mImages.observe(this, Observer<PlaylistModel> {
                 val model: PlaylistModel? = it
@@ -78,19 +70,23 @@ class MainActivity : AppCompatActivity() {
 
         } else {
             network_container.visible()
-            recycler_view.gone()
             UIHelper().showToast(getString(R.string.internet_connection))
         }
     }
 
+    private fun updateAdapterData(list: PlaylistModel?) {
+        val data = list?.items
+        mAdapter.submitList(data)
+    }
+
     private fun updateDatabasePlaylist(model: PlaylistModel) {
-        mViewModel.insertPlaylistData(model)
+        model.let { mViewModel.insertPlaylistData(it) }
     }
 
     private fun getDataFromDatabase() {
         CoroutineScope(Dispatchers.Main).launch {
             val model = mViewModel.getDataFromDb()
-            if (!(model == null || model.items.isNullOrEmpty())) {
+            if (model != null || model.items.isNullOrEmpty()) {
                 updateAdapterData(model)
                 fetchNewPlaylistData()
 
@@ -102,15 +98,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchNewPlaylistData() {
         mViewModel.getImages()
-        mViewModel.mImages.observe(this, Observer<PlaylistModel> { data: PlaylistModel ->
-            updateDatabasePlaylist(data)
-            updateAdapterData(data)
-        })
-    }
-
-    fun refresh(view: View) {
-        fetchData()
-    }
+        mViewModel.mImages.observe(
+            this,
+            Observer<PlaylistModel> { data ->
+                when {
+                    data != null -> {
+                        updateDatabasePlaylist(data)
+                        updateAdapterData(data)
+                    }
+                }
+            }
+        )}
 }
-
-
