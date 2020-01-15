@@ -1,5 +1,4 @@
 package com.example.kotlin2.ui.detailPlaylist
-
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +22,7 @@ class DetailPlaylistViewModel : ViewModel() {
 
             override fun onFailure(error: Exception) {
                 UIHelper().showToast(error.message.toString())
-                Log.d("ololo", " error" + error.localizedMessage)
+                Log.d("ololo", " error " + error.localizedMessage)
             }
         })
     }

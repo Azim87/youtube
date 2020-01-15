@@ -2,7 +2,7 @@ package com.example.kotlin2.data.repository
 
 import com.example.kotlin2.model.PlaylistModel
 import androidx.lifecycle.MutableLiveData
-import com.example.kotlin2.model.DetaiVideolModel
+import com.example.kotlin2.model.DetailVideolModel
 import com.example.kotlin2.model.DetailModel
 
 interface IYoutubeRepository {
@@ -22,7 +22,7 @@ interface IYoutubeRepository {
     }
 
     interface OnVideoDetail{
-        fun onSuccess(data:  MutableLiveData<DetaiVideolModel>)
+        fun onSuccess(data:  MutableLiveData<DetailVideolModel>)
         fun onFailure(error: Exception)
     }
 }

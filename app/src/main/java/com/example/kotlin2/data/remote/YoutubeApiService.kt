@@ -1,6 +1,6 @@
 package com.example.kotlin2.data.remote
 
-import com.example.kotlin2.model.DetaiVideolModel
+import com.example.kotlin2.model.DetailVideolModel
 import com.example.kotlin2.model.DetailModel
 import com.example.kotlin2.model.PlaylistModel
 import retrofit2.Call
@@ -29,7 +29,7 @@ interface YoutubeApiService {
         @Query("key") apiKey: String,
         @Query("part") part: String,
         @Query("id") id: String
-    ): Call<DetaiVideolModel>
+    ): Call<DetailVideolModel>
 }
 
 

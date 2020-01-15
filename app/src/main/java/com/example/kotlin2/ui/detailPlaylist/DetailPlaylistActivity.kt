@@ -13,6 +13,8 @@ import com.example.kotlin2.model.ItemsItem
 import com.example.kotlin2.ui.detailPlaylist.adapter.PlaylistAdapter
 import com.example.kotlin2.ui.detailVideo.DetailVideoActivity
 import com.example.kotlin2.util.Constants
+import com.example.kotlin2.util.NetworkUtil
+import com.example.kotlin2.util.UIHelper
 import kotlinx.android.synthetic.main.activity_detail_playlist.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,41 +61,47 @@ class DetailPlaylistActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun getDetailPlaylistData() {
+    private fun getDetailPlaylistData() {
         CoroutineScope(Dispatchers.Main).launch {
-            var model = mViewModel.getDetailedPlaylistData()
-            if (model != null && model.isNullOrEmpty()) {
-                getExtraDetailedPlaylistData(model)
+            val model = mViewModel.getDetailedPlaylistData()
+            if (model != null && !model.isNullOrEmpty()) {
+               getExtraDetailedPlaylistData(model)
             } else {
                 subscribeToViewModel()
             }
         }
     }
 
-    fun getExtraDetailedPlaylistData(model: List<DetailModel>) {
+    private fun getExtraDetailedPlaylistData(model: List<DetailModel>) {
         var detailPlaylist: DetailModel? = null
         for (i in 0 until model.size) {
-            for (z in 0 until model[i].items!!.size) {
-                if (model[i].items!![z].snippet.playlistId == id) {
-                    detailPlaylist == model[i]
+            for (z in 0 until model[i].items.size) {
+                if (model[i].items[z].snippet.playlistId == id) {
+                    detailPlaylist = model[i]
                 }
             }
         }
 
         if (detailPlaylist != null) updateAdapterData(detailPlaylist)
-        else subscribeToViewModel()
+         else subscribeToViewModel()
     }
 
     private fun subscribeToViewModel() {
-        val datata = id?.let { mViewModel.getParsedData(it) }
-        mViewModel.mDetailPlaylist.observe(this, Observer<DetailModel> {data: DetailModel ->
-            if (datata != null){
-                updateAdapterData(data)
-                updateDatabaseDetailedPlaylistData(data)
-            }
-        })
+        if (NetworkUtil.networkIsOnline()) {
+            id?.let { mViewModel.getParsedData(it) }
+            mViewModel.mDetailPlaylist.observe(
+                this,
+                Observer<DetailModel> { data: DetailModel ->
+                    updateAdapterData(data)
+                    updateDatabaseDetailedPlaylistData(data)
+                }
+            )
+        } else {
+            UIHelper().showToast("Check internet connection")
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateAdapterData(list: DetailModel?) {
         tv_description.text = list!!.items[0].snippet.description
         tv_title.text = titlee
@@ -101,8 +109,8 @@ class DetailPlaylistActivity : AppCompatActivity() {
         mPlaylistAdapter.submitList(list.items)
     }
 
-    private fun updateDatabaseDetailedPlaylistData(value: DetailModel){
-        mViewModel.insertAllDetailPlaylistData(value)
+    private fun updateDatabaseDetailedPlaylistData(video: DetailModel) {
+        mViewModel.insertAllDetailPlaylistData(video)
     }
 
     private fun backToMain() {

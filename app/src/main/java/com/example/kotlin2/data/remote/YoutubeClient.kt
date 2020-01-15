@@ -4,7 +4,7 @@ import com.example.kotlin2.model.PlaylistModel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlin2.data.repository.IYoutubeRepository
-import com.example.kotlin2.model.DetaiVideolModel
+import com.example.kotlin2.model.DetailVideolModel
 import com.example.kotlin2.model.DetailModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -75,18 +75,18 @@ class YoutubeClient : IYoutubeClient {
             apiKey,
             part,
             videoId
-        ).enqueue(object : Callback<DetaiVideolModel> {
-            val data = MutableLiveData<DetaiVideolModel>()
+        ).enqueue(object : Callback<DetailVideolModel> {
+            val data = MutableLiveData<DetailVideolModel>()
             override fun onResponse(
-                call: Call<DetaiVideolModel>,
-                response: Response<DetaiVideolModel> ) {
+                call: Call<DetailVideolModel>,
+                response: Response<DetailVideolModel> ) {
                 if (response.isSuccessful){
                     data.value = response.body()
                     videoDetailYoutubeCallback.onSuccess(data)
                 }
             }
 
-            override fun onFailure(call: Call<DetaiVideolModel>, t: Throwable) {
+            override fun onFailure(call: Call<DetailVideolModel>, t: Throwable) {
                 videoDetailYoutubeCallback.onFailure(java.lang.Exception(t))
             }
 

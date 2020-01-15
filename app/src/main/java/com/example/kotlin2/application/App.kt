@@ -20,7 +20,8 @@ class App : Application() {
         youtubeRepository = YoutubeRepository()
         database = Room.databaseBuilder(this, YoutubeDataBase::class.java,
             DATABASE
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     fun getInstance(): App {

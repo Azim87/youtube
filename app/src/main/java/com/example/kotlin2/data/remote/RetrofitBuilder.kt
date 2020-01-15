@@ -7,11 +7,11 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitBuilder {
 
-    private val BASE_URL = "https://www.googleapis.com"
+    private const val BASE_URL = "https://www.googleapis.com/"
     private var client: OkHttpClient? = null
     private var retrofit: YoutubeApiService? = null
 
-    public fun getService(): YoutubeApiService {
+    fun getService(): YoutubeApiService {
         if (retrofit == null)
             retrofit = buildRetrofit()
         return retrofit!!
@@ -23,7 +23,7 @@ object RetrofitBuilder {
         return client!!
     }
 
-    private fun client(): OkHttpClient {
+    private fun client(): OkHttpClient? {
         return OkHttpClient().newBuilder()
             .connectTimeout(50, TimeUnit.SECONDS)
             .readTimeout(50, TimeUnit.SECONDS)

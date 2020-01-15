@@ -61,10 +61,9 @@ class MainActivity : AppCompatActivity() {
             mViewModel.getImages()
             mViewModel.mImages.observe(this, Observer<PlaylistModel> {
                 val model: PlaylistModel? = it
-                this.updateAdapterData(model)
                 if (model != null) {
+                    updateAdapterData(model)
                     updateDatabasePlaylist(model)
-                    getDataFromDatabase()
                 }
             })
 
@@ -86,10 +85,9 @@ class MainActivity : AppCompatActivity() {
     private fun getDataFromDatabase() {
         CoroutineScope(Dispatchers.Main).launch {
             val model = mViewModel.getDataFromDb()
-            if (model != null || model.items.isNullOrEmpty()) {
+            if (model != null && !model.items!!.isNullOrEmpty()) {
                 updateAdapterData(model)
                 fetchNewPlaylistData()
-
             } else {
                 fetchData()
             }

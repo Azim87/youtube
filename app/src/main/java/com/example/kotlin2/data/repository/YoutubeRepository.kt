@@ -4,7 +4,7 @@ import com.example.kotlin2.model.PlaylistModel
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlin2.data.remote.YoutubeClient
 import com.example.kotlin2.data.repository.IYoutubeRepository.OnYoutubeCallback
-import com.example.kotlin2.model.DetaiVideolModel
+import com.example.kotlin2.model.DetailVideolModel
 import com.example.kotlin2.model.DetailModel
 
 class YoutubeRepository : IYoutubeRepository {
@@ -41,7 +41,7 @@ class YoutubeRepository : IYoutubeRepository {
 
     override fun getVideoDetail(videoId: String, videoDetail: IYoutubeRepository.OnVideoDetail) {
         youtubeClient?.getVideo(videoId, object : IYoutubeRepository.OnVideoDetail {
-            override fun onSuccess(data: MutableLiveData<DetaiVideolModel>) {
+            override fun onSuccess(data: MutableLiveData<DetailVideolModel>) {
                 videoDetail.onSuccess(data)
             }
 

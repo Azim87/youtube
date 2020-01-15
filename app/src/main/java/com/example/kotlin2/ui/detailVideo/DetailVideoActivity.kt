@@ -1,9 +1,12 @@
 package com.example.kotlin2.ui.detailVideo
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseArray
 import android.view.ViewGroup
 import android.widget.Button
@@ -18,15 +21,16 @@ import at.huber.youtubeExtractor.VideoMeta
 import at.huber.youtubeExtractor.YouTubeExtractor
 import at.huber.youtubeExtractor.YtFile
 import com.example.kotlin2.R
-import com.example.kotlin2.model.DetaiVideolModel
+import com.example.kotlin2.model.DetailVideolModel
 import com.example.kotlin2.model.YtVideo
 import com.example.kotlin2.ui.detailVideo.adapter.DownloadDialogAdapter
-import com.example.kotlin2.util.CallBacks
-import com.example.kotlin2.util.Constants
-import com.example.kotlin2.util.DownloadMaster
-import com.example.kotlin2.util.PlayerManager
+import com.example.kotlin2.util.*
 import com.google.android.exoplayer2.Player
 import kotlinx.android.synthetic.main.activity_detail_video.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.IOException
 
 class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
 
@@ -54,7 +58,7 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         player = playerManager.playerView.player
         setupViews()
         getIntentData()
-        subscribeToViewModel()
+        getVideoDetailData()
         onBackClick()
     }
 
@@ -64,12 +68,53 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
     }
 
     private fun subscribeToViewModel() {
-        mDetailVideoViewModel = ViewModelProviders.of(this).get(DetailVideoViewModel::class.java)
-        videoId?.let { mDetailVideoViewModel!!.getVideoDetail(it) }
+        if (NetworkUtil.networkIsOnline()) {
+            mDetailVideoViewModel =
+                ViewModelProviders.of(this).get(DetailVideoViewModel::class.java)
+            videoId?.let { mDetailVideoViewModel!!.getVideoDetail(it) }
 
-        mDetailVideoViewModel?.mVideoDetail?.observe(this, Observer<DetaiVideolModel> {
-            updateAdapterData(it)
-        })
+            mDetailVideoViewModel?.mVideoDetail?.observe(
+                this,
+                Observer<DetailVideolModel> { videoData: DetailVideolModel ->
+                    if (videoData != null) {
+                        updateAdapterData(videoData)
+                        updateDatabaseDetailedVideoData(videoData)
+                    }
+                }
+            )
+        } else {
+            UIHelper().showToast("Check internet connection")
+            getVideoDetailData()
+        }
+    }
+
+    private fun getVideoDetailData() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val videoModel = mDetailVideoViewModel?.getAllVideoDetailData()
+            if (videoModel != null && !videoModel.isNullOrEmpty()) {
+                getExtraDetailedPlaylistData(videoModel)
+            } else {
+                subscribeToViewModel()
+            }
+        }
+    }
+
+    private fun getExtraDetailedPlaylistData(model: List<DetailVideolModel>) {
+        var detailPlaylist: DetailVideolModel? = null
+        for (i in 0 until model.size) {
+            for (z in 0 until model[i].items.size) {
+                if (model[i].items[z].id == videoId) {
+                    detailPlaylist = model[i]
+                }
+            }
+        }
+
+        if (detailPlaylist != null) updateAdapterData(detailPlaylist)
+        else subscribeToViewModel()
+    }
+
+    private fun updateDatabaseDetailedVideoData(videoModel: DetailVideolModel) {
+        mDetailVideoViewModel!!.insertAllDetailVideoData(videoModel)
     }
 
     private fun initDialogAdapter() {
@@ -84,7 +129,7 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         fileVideo = item
     }
 
-    private fun updateAdapterData(list: DetaiVideolModel?) {
+    private fun updateAdapterData(list: DetailVideolModel?) {
         video_title.text = list?.items?.get(0)?.snippet?.title
         video_description.text = list?.items?.get(0)?.snippet?.description
         fileName = list?.items?.get(0)?.snippet?.title
@@ -129,13 +174,12 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
         downloadAction(alert)
     }
 
+    @TargetApi(Build.VERSION_CODES.P)
     private fun downloadAction(builder: AlertDialog) {
         dialogDownloadButton.setOnClickListener {
             var downloadName = fileName!!
             downloadName = downloadName.replace("[\\\\><\"|*?%:#/]".toRegex(), "")
             var downloadIds = ""
-
-            try {
                 if (fileVideo?.videoFile != null) {
                     downloadIds += DownloadMaster().downloadFile(
                         this,
@@ -150,43 +194,41 @@ class DetailVideoActivity : AppCompatActivity(), CallBacks.playerCallBack {
                         downloadName + "." + fileVideo?.videoFile!!.format.ext
                     )
                 }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
             builder.dismiss()
         }
     }
 
-
     @SuppressLint("StaticFieldLeak")
-    private fun actualLink(link: String) {
-        object : YouTubeExtractor(this) {
-            override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta) {
+    private fun actualLink(link: String) = object : YouTubeExtractor(this) {
+        override fun onExtractionComplete(ytFiles: SparseArray<YtFile>?, vMeta: VideoMeta) {
+            formatsToShowList = mutableListOf()
+            var i = 0
+            var itag: Int
+            if (ytFiles != null) {
+                while (i < ytFiles.size()) {
+                    itag = ytFiles.keyAt(i)
+                    val ytFile = ytFiles.get(itag)
 
-                formatsToShowList = mutableListOf()
-                var i = 0
-                var itag: Int
-                if (ytFiles != null) {
-                    while (i < ytFiles.size()) {
-                        itag = ytFiles.keyAt(i)
-                        val ytFile = ytFiles.get(itag)
-
-                        if (ytFile.format.height == -1 || ytFile.format.height >= 360) {
-                            addFormatToList(ytFile, ytFiles)
-                        }
-                        i++
+                    if (ytFile.format.height == -1 || ytFile.format.height >= 360) {
+                        addFormatToList(ytFile, ytFiles)
                     }
-                }
-
-                (formatsToShowList)?.sortWith(Comparator { lhs, rhs -> lhs!!.height - rhs!!.height })
-                val yotutubeUrl: YtVideo? = formatsToShowList?.get(formatsToShowList!!.lastIndex -1)
-                if (yotutubeUrl?.videoFile?.url != null) {
-                    playVideo(yotutubeUrl?.videoFile?.url!!)
+                    i++
                 }
             }
-        }.extract(link, true, true)
-    }
+
+            (formatsToShowList)?.sortWith(Comparator { lhs, rhs -> lhs!!.height - rhs!!.height })
+
+            try {
+                val yotutubeUrl: YtVideo? = formatsToShowList?.get(formatsToShowList!!.lastIndex -1)
+                if (yotutubeUrl?.videoFile?.url != null) {
+                    playVideo(yotutubeUrl.videoFile?.url!!)
+                }
+            } catch (ex: IOException) {
+                ex.printStackTrace()
+                Log.d("oooooooooooo", " detail video " + ex.localizedMessage)
+            }
+        }
+    }.extract(link, true, true)
 
     private fun addFormatToList(ytFile: YtFile, ytFiles: SparseArray<YtFile>) {
         val height = ytFile.format.height
